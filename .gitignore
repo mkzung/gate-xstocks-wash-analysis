@@ -1,0 +1,7 @@
+analysis/cache/
+analysis/cache_bybit/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+post/self-trading.png

@@ -1,0 +1,23 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Regenerate per-market mechanism from the public Gate dumps
+        run: cd analysis && python build_analysis.py
+      - name: Screen the whole venue
+        run: cd analysis && python screen.py
+      - name: Longitudinal onset series
+        run: cd analysis && python longitudinal.py
+      - name: Cross-venue comparison (Gate vs Bybit)
+        run: cd analysis && python crossvenue.py
+      - name: Verify the per-market mechanism numbers
+        run: cd analysis && python verify.py
+      - name: Unit tests (mechanism + screen + cross-venue + onset invariants)
+        run: pytest -q
